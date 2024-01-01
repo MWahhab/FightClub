@@ -37,7 +37,6 @@ class ClubController
      */
     public function __construct() {
         $this->roster = new Roster();
-        //$this->roster->displayRoster();
     }
 
     /**

@@ -35,16 +35,6 @@ class Roster
         return $this->roster;
     }
 
-    /**
-     * @return void Displays each fighter with all of their stats in an easily readable format
-     */
-    public function displayRoster(): void
-    {
-        foreach($this->getRoster() as $index => $fighter) {
-            echo "{$index}. {$fighter->getName()} who has {$fighter->getHealth()} health points, an attack power of {$fighter->getAttackPower()} and a defence of {$fighter->getDefence()}\n";
-        }
-    }
-
     public function getFighterByIndex(int $index): Fighter|null
     {
         if (isset($this->roster[$index])) {
