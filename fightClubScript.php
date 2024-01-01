@@ -4,7 +4,7 @@ include_once("Roster.php");
 include_once("ClubController.php");
 
 $json        = file_get_contents('php://input');
-$requestData = json_decode($json, true); // Decode as an associative array
+$requestData = json_decode($json, true);
 
 $firstFighterIndex  = (int) $requestData['firstFighter'];
 $secondFighterIndex = (int) $requestData['secondFighter'];
