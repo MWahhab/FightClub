@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<label for="firstFighter">Choose the first fighter:</label>
+
+<select name="firstFighter" id="firstFighter">
+
+</select>
+
+<br>
+
+<label for="secondFighter">Choose the second fighter:</label>
+
+<select name="secondFighter" id="secondFighter">
+
+</select>
+
+<br>
+
+<div id="events">
+
+</div>
+
+<br>
+
+<button class="bg-gray-400 rounded-md p-2 ml-2" onclick="startFight()">
+    Fight!
+</button>
+
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+
+    window.addEventListener("load", () => {
+        fetchRoster();
+    });
+
+    function fetchRoster() {
+        axios({
+            method: 'post',
+            url: 'http://localhost/FightClub/formHandler.php',
+        }).then(function (response) {
+            if (response.data.length <= 0)
+            {
+                console.log("Nothing on the roster");
+                return;
+            }
+
+            fillRosterSelects(response.data);
+
+        }).catch(function (error) {
+            console.error('Error fetching data:', error);
+        });
+    }
+
+    function fillRosterSelects(data) {
+        for (let i = 0; i < data.length; i++) {
+
+            let fighter =  data[i].name
+                + " HP: "
+                + data[i].health
+                + " AP "
+                + data[i].attackPower
+                + " DEF "
+                + data[i].defence
+
+            let option = document.createElement('option')
+            option.value = i
+            option.textContent = fighter
+
+            document.getElementById('firstFighter').appendChild(option)
+            let optionClone = option.cloneNode(true);
+            document.getElementById('secondFighter').appendChild(optionClone);
+        }
+    }
+
+    function startFight() {
+        axios.post('http://localhost/FightClub/fightClubScript.php', {
+            firstFighter: document.getElementById('firstFighter').value,
+            secondFighter: document.getElementById('secondFighter').value
+        })
+            .then(function (response) {
+                if (response.data.length <= 0)
+                {
+                    console.log("Nothing on the events list!");
+                    return;
+                }
+
+                printToScreen(response.data);
+            })
+            .catch(function (error) {
+                console.log('Error fetching data:', error);
+            });
+    }
+
+    function printToScreen(data) {
+
+        let eventsElement = document.getElementById("events");
+        eventsElement.innerText = "";
+
+
+        console.log(data);
+        for(let i = 0; i < data.length; i++) {
+
+            let event = document.createElement("p");
+            event.textContent = data[i];
+
+            eventsElement.appendChild(event);
+
+        }
+    }
+
+
+
+</script>
